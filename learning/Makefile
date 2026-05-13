@@ -1,7 +1,7 @@
 NAME = run
 CC = c++
 HEADER =
-FLAGS = -Wall -Wextra -Werror -std=c++98 -g
+FLAGS =  -Werror -std=c++98 -g
 SRCS = main.cpp
 
 OBJS = $(SRCS:.cpp=.o)

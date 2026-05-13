@@ -41,33 +41,10 @@ vector__pairs	fillPairs(vector__ints::iterator first, vector__ints::iterator las
 	return (pairs);
 }
 
-void	orderFirst(vector__pairs &pairs)
+void	orderFirst(vector__pairs &pairs) // ⚠️
 {
 	std::sort(pairs.begin(), pairs.end());
 	return ;
-}
-
-vector__ints	pMerge(vector__pairs &pairs)
-{
-	vector__ints	myVector;
-	int				e = (*(pairs.end() - 1)).second;
-	int				a1 = (*pairs.begin()).first;
-	int				b1 = (*pairs.begin()).second;
-	int				a2 = (*(pairs.begin() + 1)).first;
-	// int				b2 = (*(pairs.begin() + 1)).second;
-
-	myVector.push_back (b1);
-	myVector.push_back (a1);
-	myVector.push_back (a2);
-
-	if (e < b1)
-		myVector.insert(myVector.begin(), e);
-	else if (e < a1)
-		myVector.insert(myVector.begin() + 1, e);
-	else if (e < a2)
-		myVector.insert(myVector.begin() + 2, e);
-
-	return (myVector);
 }
 
 vector__ints	generate_jSequence(int len)
@@ -91,13 +68,53 @@ vector__ints	generate_jSequence(int len)
 	return (sequence);
 }
 
-//Jn​=Jn−1​+2Jn−2​
+void	mergeFirst(vector__pairs &pairs, vector__ints &thisVector)
+{
+	for (vector__pairs::iterator i = pairs.begin(); i != pairs.end(); i ++)
+		thisVector.push_back ((*i).first);
+	return;
+}
+
+void	myMerge(std::pair<int, int>	&myPair, vector__ints &thisVector) // ⚠️ NEEDS a PROPER insert
+{
+
+	std::cout << "i insert " << myPair.second << std::endl;
+
+	// find upper First position
+
+	// merge-insert within Range
+	// mergeInsert(begin, thisVector.find(myPain.first), thisVector, value);
+}
+
+void	mergeSecond(vector__pairs &pairs, vector__ints &thisVector) // 🚧
+{
+	vector__ints	jSequence;
+
+	jSequence = generate_jSequence(pairs.size());
+	printVectorInts (jSequence); // tester
+	std::cout<< "\n***********was sequence**************\n";
+
+	// for each pair
+	// loop through jsequence
+	for (vector__ints::iterator i = jSequence.begin() + 3; i != jSequence.end(); i ++) // 🚧
+	{
+		int	min = *(i - 1);
+		int	max = *(i);
+
+		while (max > min)
+		{
+			try { myMerge (pairs.at(max - 1), thisVector); } // ⚠️ also better control against size!!!
+			catch (...){};
+			max --;
+		}
+	}
+	return ;
+}
 
 int	main()
 {
 	vector__ints	input;
-	vector__ints	jSequence;
-	vector__ints	final;
+	vector__ints	ordered;
 	vector__pairs	pairs;
 	bool			odd;
 
@@ -109,27 +126,29 @@ int	main()
 	input.push_back (7);
 	input.push_back (8);
 	input.push_back (6);
-	// input.push_back (9); // handle odd later
+	// input.push_back (9); // handle odd later ⚠️
 
-	// generate jSequence
-	jSequence = generate_jSequence(input.size() / 2);
-	printVectorInts (jSequence); // tester
-	std::cout<< "\n*************************\n";
-
-	// create pairs
+	// create pairs ✅
 	odd = (input.size() % 2);
 	pairs = fillPairs (input.begin(), input.end() - odd);
 	printVectorPairs (pairs);
 	std::cout<< "*************************\n";
 
-	// order high values in pairs
-	orderFirst(pairs); // implement my own sort
+	// order high values in pairs ⚠️
+	orderFirst(pairs); // implement my own sort ⚠️
 	printVectorPairs (pairs);
 	std::cout<< "*************************\n";
 
-	// merge to final
-	final = (pMerge(pairs));
-	printVectorInts (final);
+	// merge high to ordered ✅
+	mergeFirst (pairs, ordered);
+	printVectorInts (ordered);
+	std::cout<< "\n*************************\n";
+
+	// merge low to ordered 🚧
+	//   first one is a freebie
+	ordered.insert (ordered.begin(), (*pairs.begin()).second);
+	mergeSecond (pairs, ordered); // 🚧
+	printVectorInts (ordered);
 	std::cout<< "\n*************************\n";
 
 	return (0);
