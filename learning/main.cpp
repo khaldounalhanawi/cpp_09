@@ -70,9 +70,33 @@ vector__ints	pMerge(vector__pairs &pairs)
 	return (myVector);
 }
 
+vector__ints	generate_jSequence(int len)
+{
+	vector__ints	sequence;
+	int				i;
+	int				val;
+	
+	if (!len)
+		throw std::runtime_error ("len is too short for jSequence");
+
+	sequence.push_back (0);
+	sequence.push_back (1);
+	i = 2;
+	while (sequence.at(i - 1) < len)
+	{
+		val = sequence.at(i - 1) + 2 * (sequence.at(i - 2));
+		sequence.push_back (val);
+		i ++;
+	}
+	return (sequence);
+}
+
+//Jn​=Jn−1​+2Jn−2​
+
 int	main()
 {
 	vector__ints	input;
+	vector__ints	jSequence;
 	vector__ints	final;
 	vector__pairs	pairs;
 	bool			odd;
@@ -82,17 +106,31 @@ int	main()
 	input.push_back (1);
 	input.push_back (3);
 	input.push_back (2);
-	input.push_back (6);     // only for odd implementation
+	input.push_back (7);
+	input.push_back (8);
+	input.push_back (6);
+	// input.push_back (9); // handle odd later
 
+	// generate jSequence
+	jSequence = generate_jSequence(input.size() / 2);
+	printVectorInts (jSequence); // tester
+	std::cout<< "\n*************************\n";
+
+	// create pairs
 	odd = (input.size() % 2);
 	pairs = fillPairs (input.begin(), input.end() - odd);
 	printVectorPairs (pairs);
 	std::cout<< "*************************\n";
+
+	// order high values in pairs
 	orderFirst(pairs); // implement my own sort
 	printVectorPairs (pairs);
 	std::cout<< "*************************\n";
+
+	// merge to final
 	final = (pMerge(pairs));
 	printVectorInts (final);
+	std::cout<< "\n*************************\n";
 
 	return (0);
 }
