@@ -1,8 +1,14 @@
-NAME = run
+NAME = pp
 CC = c++
-HEADER =
-FLAGS =  -Werror -std=c++98 -g
-SRCS = main.cpp
+HEADER =	types.hpp \
+			utility.hpp \
+			jSequence.hpp
+
+FLAGS = -Wall -Wextra -Werror -std=c++98
+
+SRCS =	main.cpp \
+		utility.cpp \
+		jSequence.cpp
 
 OBJS = $(SRCS:.cpp=.o)
 
