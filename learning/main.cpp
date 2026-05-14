@@ -1,30 +1,31 @@
 #include <iostream>
 #include <utility>
 #include <vector>
+#include <deque>
 #include <iterator>
 #include <algorithm>
 
-typedef std::vector< int >					vector__ints;
-typedef std::vector< std::pair<int, int> >	vector__pairs;
+typedef std::vector< int >					t_vector_ints;
+typedef std::vector< std::pair<int, int> >	t_vector_pairs;
 
-void	printVectorPairs(vector__pairs &pairs)
+void	printVectorPairs(t_vector_pairs &pairs)
 {
-	for(vector__pairs::iterator i = pairs.begin(); i != pairs.end(); i++)
+	for(t_vector_pairs::iterator i = pairs.begin(); i != pairs.end(); i++)
 		std::cout <<"(" << (*i).first << ", " << (*i).second << ")" << "\n";
 }
 
-void	printVectorInts(vector__ints &ints)
+void	printVectorInts(t_vector_ints &ints)
 {
-	for(vector__ints::iterator i = ints.begin(); i != ints.end(); i++)
+	for(t_vector_ints::iterator i = ints.begin(); i != ints.end(); i++)
 		std::cout << *i << ", ";
 }
 
-vector__pairs	fillPairs(vector__ints::iterator first, vector__ints::iterator last)
+t_vector_pairs	fillPairs(t_vector_ints::iterator first, t_vector_ints::iterator last)
 {
-	vector__pairs		pairs;
+	t_vector_pairs		pairs;
 	std::pair<int, int>	temp;
 
-	for (vector__ints::iterator i = first; i != last; i += 2)
+	for (t_vector_ints::iterator i = first; i != last; i += 2)
 	{
 		if (*i > *(i + 1))
 		{
@@ -41,15 +42,15 @@ vector__pairs	fillPairs(vector__ints::iterator first, vector__ints::iterator las
 	return (pairs);
 }
 
-void	orderFirst(vector__pairs &pairs) // ⚠️
+void	orderFirst(t_vector_pairs &pairs) // ⚠️ implement my own sort
 {
 	std::sort(pairs.begin(), pairs.end());
 	return ;
 }
 
-vector__ints	generate_jSequence(int len)
+t_vector_ints	generate_jSequence(int len)
 {
-	vector__ints	sequence;
+	t_vector_ints	sequence;
 	int				i;
 	int				val;
 	
@@ -68,27 +69,59 @@ vector__ints	generate_jSequence(int len)
 	return (sequence);
 }
 
-void	mergeFirst(vector__pairs &pairs, vector__ints &thisVector)
+void	mergeFirst(t_vector_pairs &pairs, t_vector_ints &thisVector)
 {
-	for (vector__pairs::iterator i = pairs.begin(); i != pairs.end(); i ++)
+	for (t_vector_pairs::iterator i = pairs.begin(); i != pairs.end(); i ++)
 		thisVector.push_back ((*i).first);
 	return;
 }
 
-void	myMerge(std::pair<int, int>	&myPair, vector__ints &thisVector) // ⚠️ NEEDS a PROPER insert
+t_vector_ints::iterator binaryFind(t_vector_ints::iterator start, t_vector_ints::iterator finish, int val)
 {
+	int	len = std::distance (start, finish);
+	if (len == 1)
+	{
+		if (val < *start)
+			return (start);
+		else
+			return (finish);
+	}
 
-	std::cout << "i insert " << myPair.second << std::endl;
+	if (len == 2)
+	{
+		if (val < *start)
+			return (start);
+		else if (val > *(start + 1))
+			return (finish);
+		else
+			return (start + 1);
+	}
 
-	// find upper First position
-
-	// merge-insert within Range
-	// mergeInsert(begin, thisVector.find(myPain.first), thisVector, value);
+	if (val > *(start + (len / 2)))
+		return (binaryFind ((start + (len / 2) + 1), finish, val));
+	else
+		return (binaryFind (start , (start + (len / 2)), val));
 }
 
-void	mergeSecond(vector__pairs &pairs, vector__ints &thisVector) // 🚧
+
+void	myMerge(std::pair<int, int>	&myPair, t_vector_ints &thisVector)
 {
-	vector__ints	jSequence;
+	t_vector_ints::iterator	matchAddress;
+	t_vector_ints::iterator	pos;
+
+	// find upper First position
+	matchAddress = std::find(thisVector.begin(), thisVector.end(), myPair.first);
+
+	// find proper position & merge
+	pos = binaryFind (thisVector.begin(), matchAddress, myPair.second);
+	thisVector.insert (pos, myPair.second);
+
+	return;
+}
+
+void	mergeSecond(t_vector_pairs &pairs, t_vector_ints &thisVector) // 🚧
+{
+	t_vector_ints	jSequence;
 
 	jSequence = generate_jSequence(pairs.size());
 	printVectorInts (jSequence); // tester
@@ -96,7 +129,7 @@ void	mergeSecond(vector__pairs &pairs, vector__ints &thisVector) // 🚧
 
 	// for each pair
 	// loop through jsequence
-	for (vector__ints::iterator i = jSequence.begin() + 3; i != jSequence.end(); i ++) // 🚧
+	for (t_vector_ints::iterator i = jSequence.begin() + 3; i != jSequence.end(); i ++) // 🚧
 	{
 		int	min = *(i - 1);
 		int	max = *(i);
@@ -113,9 +146,9 @@ void	mergeSecond(vector__pairs &pairs, vector__ints &thisVector) // 🚧
 
 int	main()
 {
-	vector__ints	input;
-	vector__ints	ordered;
-	vector__pairs	pairs;
+	t_vector_ints	input;
+	t_vector_ints	ordered;
+	t_vector_pairs	pairs;
 	bool			odd;
 
 	input.push_back (4);
@@ -125,7 +158,7 @@ int	main()
 	input.push_back (2);
 	input.push_back (7);
 	input.push_back (8);
-	input.push_back (6);
+	input.push_back (-1);
 	// input.push_back (9); // handle odd later ⚠️
 
 	// create pairs ✅
