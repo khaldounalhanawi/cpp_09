@@ -12,4 +12,5 @@ void	printVectorInts(t_vector_ints &ints)
 {
 	for(t_vector_ints::iterator i = ints.begin(); i != ints.end(); i++)
 		std::cout << *i << ", ";
+	std::cout << std::endl;
 }

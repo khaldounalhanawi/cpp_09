@@ -4,7 +4,7 @@ HEADER =	types.hpp \
 			utility.hpp \
 			jSequence.hpp
 
-FLAGS = -Wall -Wextra -Werror -std=c++98
+FLAGS = -Wall -Wextra -Werror -std=c++98 -g
 
 SRCS =	main.cpp \
 		utility.cpp \

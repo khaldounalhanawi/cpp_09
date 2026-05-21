@@ -30,19 +30,6 @@ t_vector_pairs	fillPairs(t_vector_ints::iterator first, t_vector_ints::iterator 
 	return (pairs);
 }
 
-void	orderFirst(t_vector_pairs &pairs) // ⚠️ implement my own sort
-{
-	std::sort(pairs.begin(), pairs.end());
-	return ;
-}
-
-void	mergeFirst(t_vector_pairs &pairs, t_vector_ints &thisVector)
-{
-	for (t_vector_pairs::iterator i = pairs.begin(); i != pairs.end(); i ++)
-		thisVector.push_back ((*i).first);
-	return;
-}
-
 t_vector_ints::iterator binaryFind(t_vector_ints::iterator start, t_vector_ints::iterator finish, int val)
 {
 	int	len = std::distance (start, finish);
@@ -73,6 +60,7 @@ t_vector_ints::iterator binaryFind(t_vector_ints::iterator start, t_vector_ints:
 	else
 		return (binaryFind (start , (start + (len / 2)), val));
 }
+
 
 void	mergeInsert(std::pair<int, int>	&myPair, t_vector_ints &thisVector)
 {
@@ -113,32 +101,53 @@ void	mergeSecond(t_vector_pairs &pairs, t_vector_ints &thisVector)
 	return ;
 }
 
-t_vector_ints	FordJohnsonSort(t_vector_ints input)
+int	main()
 {
+	t_vector_ints	input;
 	t_vector_ints	ordered;
 	t_vector_pairs	pairs;
 	bool			odd;
 
+	input.push_back (4);
+	input.push_back (5);
+	input.push_back (1);
+	input.push_back (3);
+	input.push_back (7);
+	input.push_back (8);
+	input.push_back (2);
+	input.push_back (6);
+	input.push_back (9);
+	// input.push_back (0);
+
 	odd = (input.size() % 2);
 
-	// create pairs ✅
+	// create (High,Low) pairs ✅
 	pairs = fillPairs (input.begin(), input.end() - odd);
 	printVectorPairs (pairs);
-	std::cout<< "*************************\n";
 
-	// order high values in pairs 
-	orderFirst(pairs); // implement my own sort ⚠️
-	printVectorPairs (pairs);
-	std::cout<< "*************************\n";
-
-	// merge high to ordered ✅
-	mergeFirst (pairs, ordered);
+	// merge High to ordered ✅
+	t_vector_ints::iterator	pos;
+	for (t_vector_pairs::iterator itr = pairs.begin(); itr != pairs.end(); itr ++)
+	{
+		pos = binaryFind (ordered.begin(), ordered.end(), (*itr).first);
+		ordered.insert (pos, (*itr).first);
+	}
 	printVectorInts (ordered);
-	std::cout<< "\n*************************\n";
 
-	// merge low to ordered ✅
-	//   first one is a freebie
-	ordered.insert (ordered.begin(), (*pairs.begin()).second);
+	// first Low is a freebie
+	int low;
+	for (t_vector_pairs::iterator itr = pairs.begin(); itr != pairs.end(); itr++)
+	{
+		if ((*itr).first == *ordered.begin())
+		{
+			low = (*itr).second;
+			break;
+		}
+	}
+	ordered.insert (ordered.begin(), low);
+	printVectorInts (ordered);
+
+	// merge Low to ordered ✅
 	mergeSecond (pairs, ordered);
 
 	// insert-merge odd item at last pos ✅
@@ -149,34 +158,6 @@ t_vector_ints	FordJohnsonSort(t_vector_ints input)
 						lastItem);
 	}
 
-	return (ordered);
-}
-
-
-int	main()
-{
-	t_vector_ints	input;
-	t_vector_ints	ordered;
-
-	input.push_back (4);
-	input.push_back (7);
-	input.push_back (5);
-	input.push_back (1);
-	input.push_back (3);
-	input.push_back (2);
-	input.push_back (0);
-	input.push_back (7);
-	input.push_back (8);
-	input.push_back (6);
-	input.push_back (9);
-	input.push_back (0);
-	input.push_back (22);
-	input.push_back (-45);
-
-	ordered = FordJohnsonSort (input);
-
 	printVectorInts (ordered);
-	std::cout<< "\n*************************\n";
-
 	return (0);
 }
