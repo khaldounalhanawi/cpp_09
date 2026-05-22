@@ -18,5 +18,6 @@ t_vector_sizeT	generate_jSequence(const size_t &len)
 		sequence.push_back (val);
 		i ++;
 	}
+	
 	return (sequence);
 }

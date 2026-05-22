@@ -30,7 +30,7 @@ t_vector_pairs	fillPairs(t_vector_ints::iterator first, t_vector_ints::iterator 
 	return (pairs);
 }
 
-t_vector_ints::iterator binaryFind(t_vector_ints::iterator start, t_vector_ints::iterator finish, int val)
+t_vector_ints::iterator binaryFindPos(t_vector_ints::iterator start, t_vector_ints::iterator finish, int val)
 {
 	int	len = std::distance (start, finish);
 
@@ -56,9 +56,9 @@ t_vector_ints::iterator binaryFind(t_vector_ints::iterator start, t_vector_ints:
 	}
 
 	if (val > *(start + (len / 2)))
-		return (binaryFind ((start + (len / 2) + 1), finish, val));
+		return (binaryFindPos ((start + (len / 2) + 1), finish, val));
 	else
-		return (binaryFind (start , (start + (len / 2)), val));
+		return (binaryFindPos (start , (start + (len / 2)), val));
 }
 
 
@@ -71,7 +71,7 @@ void	mergeInsert(std::pair<int, int>	&myPair, t_vector_ints &thisVector)
 	matchAddress = std::find(thisVector.begin(), thisVector.end(), myPair.first);
 
 	// locate proper position for Second & merge
-	pos = binaryFind (thisVector.begin(), matchAddress, myPair.second);
+	pos = binaryFindPos (thisVector.begin(), matchAddress, myPair.second);
 	thisVector.insert (pos, myPair.second);
 
 	return;
@@ -129,7 +129,7 @@ int	main()
 	t_vector_ints::iterator	pos;
 	for (t_vector_pairs::iterator itr = pairs.begin(); itr != pairs.end(); itr ++)
 	{
-		pos = binaryFind (ordered.begin(), ordered.end(), (*itr).first);
+		pos = binaryFindPos (ordered.begin(), ordered.end(), (*itr).first);
 		ordered.insert (pos, (*itr).first);
 	}
 	printVectorInts (ordered);
@@ -154,7 +154,7 @@ int	main()
 	if (odd)
 	{
 		int	lastItem = *(input.end () - 1);
-		ordered.insert (binaryFind (ordered.begin(), ordered.end(), lastItem),
+		ordered.insert (binaryFindPos (ordered.begin(), ordered.end(), lastItem),
 						lastItem);
 	}
 
