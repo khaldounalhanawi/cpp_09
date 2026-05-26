@@ -1,6 +1,4 @@
 #include <iostream>
-#include <vector>
-#include <algorithm>
 #include "utility.hpp"
 #include "types.hpp"
 #include "FordJohnsonSort.hpp"

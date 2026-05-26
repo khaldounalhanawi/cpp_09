@@ -1,4 +1,4 @@
-#include "jSequence.hpp"
+#include "types.hpp"
 
 t_vector_sizeT	generate_jSequence(const size_t &len)
 {
@@ -18,6 +18,6 @@ t_vector_sizeT	generate_jSequence(const size_t &len)
 		sequence.push_back (val);
 		i ++;
 	}
-	
+
 	return (sequence);
 }

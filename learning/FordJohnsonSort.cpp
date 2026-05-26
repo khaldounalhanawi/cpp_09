@@ -1,15 +1,56 @@
-#include <iostream>
-#include <utility>
-#include <vector>
-#include <deque>
-#include <iterator>
-#include <algorithm>
-#include "utility.hpp"
 #include "types.hpp"
 #include "mapPairs.hpp"
+#include "FordJohnsonInsert.hpp"
 #include "jSequence.hpp"
 
-t_vector_pairs	fillPairs(t_vector_ints::iterator first, t_vector_ints::iterator last)
+static t_vector_ints	sortTwo (t_vector_ints &input);
+static t_vector_pairs	fillPairs (t_vector_ints::iterator first, t_vector_ints::iterator last);
+static void				mergeSeconds (t_vector_pairs &pairs, t_vector_ints &thisVector);
+static void				binaryMergeLast (t_vector_ints &intVector, t_vector_ints &input);
+
+t_vector_ints	FordJohnsonSort(t_vector_ints &input)
+{
+	t_vector_pairs	pairs;
+	t_vector_ints	firsts;
+	t_vector_ints	orderedFirsts;
+	bool			odd;
+
+	if (input.size() == 1)
+		return (t_vector_ints (1, *input.begin()));
+
+	if (input.size() == 2)
+		return (sortTwo (input));
+
+	// determind if ODD
+	odd = (input.size() % 2);
+
+	// create pairs
+	pairs = fillPairs (input.begin(), input.end() - odd);
+
+	// create firsts vector
+	for (t_vector_pairs::iterator i = pairs.begin(); i != pairs.end(); ++i)
+		firsts.push_back ((*i).first);
+
+	// order firsts recursively
+	orderedFirsts = FordJohnsonSort (firsts);
+
+	// push orderedFirsts to final
+	t_vector_ints	final(orderedFirsts);
+
+	// remap pairs basing on orderedFirsts
+	pairs = mapPairs (pairs, orderedFirsts);
+
+	// merge Seconds to final ordered:
+	mergeSeconds (pairs, final);
+
+	// binary merge odd item at last pos
+	if (odd)
+		binaryMergeLast (final, input);
+
+	return (final);
+}
+
+static t_vector_pairs	fillPairs(t_vector_ints::iterator first, t_vector_ints::iterator last)
 {
 	t_vector_pairs		pairs;
 	std::pair<int, int>	temp;
@@ -31,55 +72,7 @@ t_vector_pairs	fillPairs(t_vector_ints::iterator first, t_vector_ints::iterator 
 	return (pairs);
 }
 
-t_vector_ints::iterator	binaryFindPos(t_vector_ints::iterator start,
-									t_vector_ints::iterator finish, int val)
-{
-	int	len = std::distance (start, finish);
-
-	if (len == 0)
-		return (start);
-
-	if (len == 1)
-	{
-		if (val < *start)
-			return (start);
-		else
-			return (finish);
-	}
-
-	if (len == 2)
-	{
-		if (val < *start)
-			return (start);
-		else if (val > *(start + 1))
-			return (finish);
-		else
-			return (start + 1);
-	}
-
-	if (val > *(start + (len / 2)))
-		return (binaryFindPos ((start + (len / 2) + 1), finish, val));
-	else
-		return (binaryFindPos (start , (start + (len / 2)), val));
-}
-
-void	mergeInsert(std::pair<int, int>	&myPair, t_vector_ints &thisVector)
-{
-	t_vector_ints::iterator	matchAddress;
-	t_vector_ints::iterator	pos;
-
-	// find First address in vector
-	matchAddress = std::find(thisVector.begin(), thisVector.end(), myPair.first);
-
-	// locate proper position for Second & merge
-	pos = binaryFindPos (thisVector.begin(), matchAddress, myPair.second);
-	thisVector.insert (pos, myPair.second);
-
-	return;
-}
-
-// Jackobsthal sequence >> 0, 1, 1, 3, 5, 11, 21, 43, 85, 171, 341,…
-void	mergeSeconds(t_vector_pairs &pairs, t_vector_ints &thisVector)
+static void	mergeSeconds(t_vector_pairs &pairs, t_vector_ints &thisVector)
 {
 	t_vector_sizeT	jSequence;
 
@@ -89,11 +82,12 @@ void	mergeSeconds(t_vector_pairs &pairs, t_vector_ints &thisVector)
 	if (pairs.size() <= 1)
 		return ;
 
+	// Jackobsthal sequence >> 0, 1, 1, 3, 5, 11, 21, 43, 85, 171, 341,…
 	jSequence = generate_jSequence(pairs.size());
 
 	// loop through jSequence & insert in reverese
 	for (t_vector_sizeT::iterator	itr = jSequence.begin() + 3;
-									itr != jSequence.end(); itr ++)
+									itr != jSequence.end(); ++itr)
 	{
 		size_t	lowerBound = *(itr - 1);
 		size_t	upperBound = *(itr);
@@ -111,7 +105,7 @@ void	mergeSeconds(t_vector_pairs &pairs, t_vector_ints &thisVector)
 	return ;
 }
 
-t_vector_ints	sortTwo(t_vector_ints &input)
+static t_vector_ints	sortTwo(t_vector_ints &input)
 {
 	t_vector_ints	ordered;
 
@@ -128,7 +122,7 @@ t_vector_ints	sortTwo(t_vector_ints &input)
 	return (ordered);
 }
 
-void	binaryMergeLast(t_vector_ints &intVector, t_vector_ints &input)
+static void	binaryMergeLast(t_vector_ints &intVector, t_vector_ints &input)
 {
 	t_vector_ints::iterator	pos;
 	int						lastItem = *(input.end () - 1);
@@ -136,48 +130,4 @@ void	binaryMergeLast(t_vector_ints &intVector, t_vector_ints &input)
 	pos = binaryFindPos (intVector.begin(), intVector.end(), lastItem);
 	intVector.insert (pos, lastItem);
 	return ;
-}
-
-t_vector_ints	FordJohnsonSort(t_vector_ints &input)
-{
-	t_vector_ints	final;
-	t_vector_pairs	pairs;
-	t_vector_ints	firsts;
-	t_vector_ints	orderedFirsts;
-	bool			odd;
-
-	if (input.size() == 1)
-		return (t_vector_ints (1, *input.begin()));
-
-	if (input.size() == 2)
-		return (sortTwo (input));
-
-	// determind if ODD
-	odd = (input.size() % 2);
-
-	// create pairs
-	pairs = fillPairs (input.begin(), input.end() - odd);
-
-	// create firsts vector
-	for (t_vector_pairs::iterator i = pairs.begin(); i != pairs.end(); i ++)
-		firsts.push_back ((*i).first);
-
-	// order firsts recursively
-	orderedFirsts = FordJohnsonSort (firsts);
-
-	// push orderedFirsts to final
-	for (size_t i = 0 ; i < orderedFirsts.size(); i ++)
-		final.push_back (orderedFirsts[i]);
-
-	// remap pairs basing on orderedFirsts
-	pairs = mapPairs (pairs, orderedFirsts);
-
-	// merge Seconds to final ordered:
-	mergeSeconds (pairs, final);
-
-	// binary merge odd item at last pos
-	if (odd)
-		binaryMergeLast (final, input);
-
-	return (final);
 }

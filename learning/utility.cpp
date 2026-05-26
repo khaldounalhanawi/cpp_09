@@ -1,6 +1,5 @@
-#include <iostream>
-#include <iterator>
-#include "utility.hpp"
+# include <iostream>
+# include "types.hpp"
 
 void	printVectorPairs(t_vector_pairs &pairs)
 {
