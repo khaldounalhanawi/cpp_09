@@ -2,14 +2,16 @@ NAME = pp
 CC = c++
 HEADER =	types.hpp \
 			utility.hpp \
-			jSequence.hpp
+			jSequence.hpp \
+			FordJohnsonSort.hpp
 
 FLAGS = -Wall -Wextra -Werror -std=c++98 -g
 # FLAGS =  -std=c++98 -g
 
 SRCS =	main.cpp \
 		utility.cpp \
-		jSequence.cpp
+		jSequence.cpp \
+		FordJohnsonSort.cpp
 
 OBJS = $(SRCS:.cpp=.o)
 
