@@ -6,6 +6,7 @@
 #include <algorithm>
 #include "utility.hpp"
 #include "types.hpp"
+#include "mapPairs.hpp"
 #include "jSequence.hpp"
 
 t_vector_pairs	fillPairs(t_vector_ints::iterator first, t_vector_ints::iterator last)
@@ -30,7 +31,7 @@ t_vector_pairs	fillPairs(t_vector_ints::iterator first, t_vector_ints::iterator 
 	return (pairs);
 }
 
-t_vector_ints::iterator binaryFindPos(t_vector_ints::iterator start,
+t_vector_ints::iterator	binaryFindPos(t_vector_ints::iterator start,
 									t_vector_ints::iterator finish, int val)
 {
 	int	len = std::distance (start, finish);
@@ -108,27 +109,6 @@ void	mergeSeconds(t_vector_pairs &pairs, t_vector_ints &thisVector)
 		}
 	}
 	return ;
-}
-
-t_vector_pairs	mapPairs(t_vector_pairs &pairs, t_vector_ints &orderedFirsts)
-{
-	t_vector_pairs		orderedPairs;
-	std::vector<bool>	used(pairs.size(), false);
-
-	for (size_t i = 0; i < orderedFirsts.size(); i++)
-	{
-		// Find the first UNUSED pair with this first value
-		for (size_t j = 0; j < pairs.size(); j++)
-		{
-			if (!used[j] && pairs[j].first == orderedFirsts[i])
-			{
-				orderedPairs.push_back(pairs[j]);
-				used[j] = true;
-				break;
-			}
-		}
-	}
-	return (orderedPairs);
 }
 
 t_vector_ints	sortTwo(t_vector_ints &input)

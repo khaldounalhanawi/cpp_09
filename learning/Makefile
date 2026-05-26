@@ -3,6 +3,7 @@ CC = c++
 HEADER =	types.hpp \
 			utility.hpp \
 			jSequence.hpp \
+			mapPairs.hpp \
 			FordJohnsonSort.hpp
 
 FLAGS = -Wall -Wextra -Werror -std=c++98 -g
@@ -11,6 +12,7 @@ FLAGS = -Wall -Wextra -Werror -std=c++98 -g
 SRCS =	main.cpp \
 		utility.cpp \
 		jSequence.cpp \
+		mapPairs.cpp \
 		FordJohnsonSort.cpp
 
 OBJS = $(SRCS:.cpp=.o)
