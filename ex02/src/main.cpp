@@ -1,7 +1,6 @@
 #include <iostream>
 #include <algorithm>
 #include "utility.hpp"
-#include "types.hpp"
 #include "FordJohnsonSort.hpp"
 
 static t_vector_ints	parseAsVector(int argc, char **argv);
@@ -91,5 +90,3 @@ static void	printTiming(const std::string &container, int size, long duration)
 				<< " us\n";
 	return;
 }
-
-// ./PmergeMe `shuf -i 1-100000 -n 3000 | tr "\n" " "`

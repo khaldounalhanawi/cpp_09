@@ -1,12 +1,10 @@
-# PmergeMe - Ford-Johnson Merge-Insert Sort
+# Ford-Johnson Merge-Insert Sort
 
-## Overview
+### Overview
 
 **PmergeMe** is a C++98 program that implements the **Ford-Johnson merge-insertion sort algorithm** (also known as merge-insertion sort) to efficiently sort positive integer sequences. The program demonstrates the algorithm using two different STL containers (`std::vector` and `std::deque`) and compares their performance.
 
 This is Exercise 02 from C++ Module 09, focused on practical application of STL containers and advanced sorting algorithms.
-
----
 
 ## Exercise Requirements
 
@@ -28,7 +26,7 @@ The program displays:
 - Invalid inputs (negative numbers, non-integers, overflow) display "Error" to stderr
 - Duplicate handling is implementation-specific
 
----
+
 
 ## The Ford-Johnson Algorithm
 
@@ -252,7 +250,7 @@ This implementation serves as an educational example of:
 
 ---
 
-**Author**: Implementation by khaldouna  
+**Author**: Implementation by khaldoun Ahanawi  
 **Date**: 2026  
 **Standard**: C++98  
-**Module**: CPP Module 09 - STL
+**Module**: CPP Module 09_ex02
