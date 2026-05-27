@@ -1,4 +1,4 @@
-NAME = pp
+NAME = PmergeMe
 CC = c++
 HEADER =	types.hpp \
 			utility.hpp \

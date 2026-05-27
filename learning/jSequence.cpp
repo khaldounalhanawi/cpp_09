@@ -1,4 +1,5 @@
 #include "types.hpp"
+#include <stdexcept>
 
 t_vector_sizeT	generate_jSequence(const size_t &len)
 {

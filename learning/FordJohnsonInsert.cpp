@@ -1,4 +1,5 @@
 #include "types.hpp"
+#include <algorithm>
 
 t_vector_ints::iterator	binaryFindPos(t_vector_ints::iterator start,
 									t_vector_ints::iterator finish, int val)
