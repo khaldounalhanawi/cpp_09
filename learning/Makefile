@@ -15,7 +15,9 @@ SRCS =	main.cpp \
 		jSequence.cpp \
 		mapPairs.cpp \
 		FordJohnsonInsert.cpp \
-		FordJohnsonSort.cpp
+		FordJohnsonInsert_deque.cpp \
+		FordJohnsonSort.cpp \
+		FordJohnsonSort_deque.cpp
 
 OBJS = $(SRCS:.cpp=.o)
 
