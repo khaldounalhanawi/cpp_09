@@ -1,14 +1,14 @@
 #include <iostream>
 #include <iomanip>
 #include <string>
-#include "extractData.hpp"
+#include "buildDataBase.hpp"
 #include "types.hpp"
 
 int	main()
 {
 	t_map	data;
 
-	try { extractData (data, ',', "assets/data.csv"); }
+	try { buildDataBase (data, ',', "assets/data.csv"); }
 	catch (const std::runtime_error &e) { std::cerr << e.what(); return (1); }
 
 	for (t_map::iterator i  = data.begin(); i != data.end(); ++i)

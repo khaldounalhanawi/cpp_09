@@ -1,8 +1,6 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <map>
-#include <utility>
 #include <cstdlib>
 #include "types.hpp"
 #include "validateDate.hpp"
@@ -10,7 +8,7 @@
 
 static void	warning(std::string msg, std::string content, int line);
 
-void	extractData(t_map &data, char delimiter, const char *path)
+void	buildDataBase(t_map &data, char delimiter, const char *path)
 {
 	// open file
 	std::ifstream file(path);

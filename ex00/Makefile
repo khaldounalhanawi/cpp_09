@@ -3,13 +3,13 @@ CC = c++
 FLAGS = -Wall -Wextra -Werror -std=c++98 -I$(HEADER_DIR) -I$(SM_HEADER_DIR)
 
 HEADER_DIR = ./include
-HEADER =	$(HEADER_DIR)/extractData.hpp \
+HEADER =	$(HEADER_DIR)/buildDataBase.hpp \
 			$(HEADER_DIR)/types.hpp \
 			$(HEADER_DIR)/validateDate.hpp \
 
 SRCS_DIR = ./src
 SRCS =	$(SRCS_DIR)/main.cpp \
-		$(SRCS_DIR)/extractData.cpp \
+		$(SRCS_DIR)/buildDataBase.cpp \
 		$(SRCS_DIR)/validateDate.cpp
 
 SM_HEADER_DIR = ./stringManipulation/include
