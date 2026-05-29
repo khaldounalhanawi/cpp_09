@@ -2,60 +2,75 @@
 #include <fstream>
 #include <string>
 #include <map>
+#include <utility>
 #include <cstdlib>
 #include "types.hpp"
 #include "validateDate.hpp"
+#include "stringManipulation.hpp"
+
+typedef std::pair<std::string, std::string> t_pairStr;
+
+static void	warning(std::string msg, std::string content, int line);
 
 void	extractData(t_map &data, char delimiter, const char *path)
 {
-	std::fstream	file;
-	std::string		temp;
-
-	file.open(path, std::fstream::in);
+	// open file
+	std::ifstream file(path);
 	if (!file)
 		throw std::runtime_error ("Failed to open Database!");
 
+	// read lines
+	int	counter = 0;
+	std::string temp;
 	while (std::getline (file, temp))
 	{
-		// skip epmty lines
+		counter ++;
+
+		// skip if line is empty
 		if (temp.empty())
 			continue;
 
-		// find position of delimiter in string
-		size_t delimiterPos = temp.find (delimiter, 0);
-		if (delimiterPos == std::string::npos
-			|| delimiterPos == 0
-			|| delimiterPos == temp.size () - 1)
+		// split string into a pair of strings
+		t_pairStr cell;
+		if (!splitStr (temp, delimiter, cell))
 		{
-			std::cout	<< "Warning: Invalid data base cell @" << temp
-						<< std::endl;
+			warning("Invalid cell", temp, counter);
 			continue;
 		}
 
-		// get data & validate it
-		std::string date = temp.substr (0, delimiterPos);
-		if (!validateDate (date))
+		// trim the strings of left and right whitespace
+		trimStr(cell.first);
+		trimStr(cell.second);
+
+		// validate the date
+		if (!validateDate (cell.first))
 		{
-			std::cout	<< "Warning: Invalid date @" << temp
-						<< std::endl;
+			warning ("Invalid date", temp, counter);
 			continue;
 		}
 
-		// get value & validate it
-		std::string value = temp.substr (delimiterPos + 1, temp.size ());
+		// convert to value to double
 		char *end = nullptr;
-		double valueDouble = std::strtod (value.c_str(), &end);
-		if (*end == *value.begin() || *end != 0)
+		double valueDouble = std::strtod (cell.second.c_str(), &end);
+
+		if (end == cell.second.c_str() || *end != '\0')
 		{
-			std::cout	<< "Warning: Invalid value @" << temp
-						<< std::endl;
+			warning ("Invalid value", temp, counter);
 			continue;
 		}
 
-		// add to DATA
-		data[date] = valueDouble;
+		// insert date&value into DataBase
+		std::pair<t_map::iterator, bool> inserted =
+			data.insert (std::make_pair(cell.first, valueDouble));
+		
+		if (!inserted.second)
+			warning ("Duplicate discarded", temp, counter);
 	}
-
-	file.close();
 	return;
+}
+
+static void	warning(std::string msg, std::string content, int line)
+{
+	std::cout	<< "Warning: @line:" << line <<" | " + msg << " >>" + content
+				<< std::endl;
 }
