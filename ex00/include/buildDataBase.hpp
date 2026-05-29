@@ -3,6 +3,6 @@
 
 # include "types.hpp"
 
-void	buildDataBase (t_map &data, char delimiter, const char *path);
+void	buildDataBase (t_map &data, char delimiter, const char *path, bool hasHeader);
 
 #endif

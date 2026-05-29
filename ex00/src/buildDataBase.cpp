@@ -8,16 +8,20 @@
 
 static void	warning(std::string msg, std::string content, int line);
 
-void	buildDataBase(t_map &data, char delimiter, const char *path)
+void	buildDataBase(t_map &data, char delimiter, const char *path, bool hasHeader)
 {
 	// open file
 	std::ifstream file(path);
 	if (!file)
 		throw std::runtime_error ("Failed to open Database!");
 
+	// skip header
+	std::string temp;
+	if (hasHeader)
+		std::getline(file, temp);
+
 	// read lines
 	int	counter = 0;
-	std::string temp;
 	while (std::getline (file, temp))
 	{
 		counter ++;
