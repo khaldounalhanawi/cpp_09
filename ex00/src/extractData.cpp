@@ -8,8 +8,6 @@
 #include "validateDate.hpp"
 #include "stringManipulation.hpp"
 
-typedef std::pair<std::string, std::string> t_pairStr;
-
 static void	warning(std::string msg, std::string content, int line);
 
 void	extractData(t_map &data, char delimiter, const char *path)
@@ -30,7 +28,7 @@ void	extractData(t_map &data, char delimiter, const char *path)
 		if (temp.empty())
 			continue;
 
-		// split string into a pair of strings
+		// split line into a pair of strings
 		t_pairStr cell;
 		if (!splitStr (temp, delimiter, cell))
 		{
@@ -49,7 +47,7 @@ void	extractData(t_map &data, char delimiter, const char *path)
 			continue;
 		}
 
-		// convert to value to double
+		// convert value to double
 		char *end = nullptr;
 		double valueDouble = std::strtod (cell.second.c_str(), &end);
 

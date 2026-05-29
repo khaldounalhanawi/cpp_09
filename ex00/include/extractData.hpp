@@ -3,6 +3,6 @@
 
 # include "types.hpp"
 
-void	extractData(t_map &data, char delimiter, const char *path);
+void	extractData (t_map &data, char delimiter, const char *path);
 
 #endif

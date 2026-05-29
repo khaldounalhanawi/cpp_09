@@ -3,6 +3,6 @@
 
 # include <string>
 
-bool	validateDate(const std::string &date);
+bool	validateDate (const std::string &date);
 
 #endif

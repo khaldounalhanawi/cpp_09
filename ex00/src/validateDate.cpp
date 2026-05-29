@@ -56,6 +56,7 @@ static int	convertToNumber(const std::string &date, int start, int end)
 	return (value);
 }
 
+/*
 static int	unitTester()
 {
 	{
@@ -101,3 +102,4 @@ static int	unitTester()
 
 	return (0);
 }
+*/

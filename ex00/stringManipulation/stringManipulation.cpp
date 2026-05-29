@@ -1,13 +1,6 @@
-#include <iostream>
-#include <fstream>
 #include <string>
 #include <map>
-#include <utility>
-#include <cstdlib>
-#include "types.hpp"
-#include "validateDate.hpp"
-
-typedef std::pair<std::string, std::string> t_pairStr;
+#include "types_str.hpp"
 
 void	trimStr(std::string &str)
 {
