@@ -71,6 +71,6 @@ void	buildDataBase(t_map &data, char delimiter, const char *path, bool hasHeader
 
 static void	warning(std::string msg, std::string content, int line)
 {
-	std::cout	<< "Warning: @line:" << line <<" | " + msg << " >>" + content
+	std::cout	<< "Database Warning: @line:" << line <<" | " + msg << " >>" + content
 				<< std::endl;
 }
