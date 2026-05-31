@@ -6,10 +6,12 @@ HEADER_DIR = ./include
 HEADER =	$(HEADER_DIR)/buildDataBase.hpp \
 			$(HEADER_DIR)/types.hpp \
 			$(HEADER_DIR)/validateDate.hpp \
+			$(HEADER_DIR)/BitcoinExchange.hpp
 
 SRCS_DIR = ./src
 SRCS =	$(SRCS_DIR)/main.cpp \
 		$(SRCS_DIR)/buildDataBase.cpp \
+		$(SRCS_DIR)/BitcoinExchange.cpp \
 		$(SRCS_DIR)/validateDate.cpp
 
 SM_HEADER_DIR = ./stringManipulation/include
