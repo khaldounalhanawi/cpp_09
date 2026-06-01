@@ -2,11 +2,10 @@
 #include <limits>
 #include <iomanip>
 #include <string>
-#include "buildDataBase.hpp"
+#include <fstream>
 #include "types.hpp"
 #include "stringManipulation.hpp"
 #include "validateDate.hpp"
-#include <fstream>
 
 enum parseStatus
 {
@@ -16,9 +15,10 @@ enum parseStatus
 	TOO_LARGE
 };
 
-parseStatus	convertToDouble (const char *str, double &value);
+parseStatus	convertToDouble (const std::string &inputString, double &value);
 parseStatus	createCell (const std::string &temp, const char delimiter,t_pairStr &cell);
-void		reportStatus (const parseStatus status, const char *source);
+parseStatus	browseRate(const t_map &data, const std::string &input, double &value);
+void		reportStatus (const parseStatus status, const std::string &source);
 void		printExchange (const t_pairStr &cell, const double value);
 
 bool	BitcoinExchange(const t_map &data,const char *path, char delimiter)
@@ -42,40 +42,36 @@ bool	BitcoinExchange(const t_map &data,const char *path, char delimiter)
 		parseStatus cellStatus = createCell (temp, delimiter, cell);
 		if (cellStatus != OK)
 		{
-			reportStatus (cellStatus, temp.c_str ());
+			reportStatus (cellStatus, temp);
 			continue;
 		}
 
 		// validate the date
 		if (!validateDate (cell.first))
 		{
-			reportStatus (BAD_INPUT, cell.first.c_str());
+			reportStatus (BAD_INPUT, cell.first);
 			continue;
 		}
 
 		// convert value to double
 		double valueDouble;
-		parseStatus convertStatus = convertToDouble (cell.second.c_str(), valueDouble);
+		parseStatus convertStatus = convertToDouble (cell.second, valueDouble);
 		if (convertStatus != OK)
 		{
-			reportStatus (convertStatus, cell.second.c_str());
+			reportStatus (convertStatus, cell.second);
 			continue;
 		}
 
 		// get closest lower bound
-		t_map::const_iterator DataIndex = data.lower_bound (cell.first);
-		if (DataIndex == data.end())
+		double rate;
+		parseStatus browseStatus = browseRate (data, cell.first, rate);
+		if (browseStatus != OK)
 		{
-			std::cout << "no find." << "\n"; // look closer
+			reportStatus (browseStatus, cell.first);
 			continue;
-		}
-		else if ((*DataIndex).first != cell.first && DataIndex != data.begin()) // checks mate
-		{
-			-- DataIndex;
 		}
 
 		// print out
-		double rate = data.at((*DataIndex).first);
 		printExchange (cell, valueDouble * rate);
 	}
 	return (true);
@@ -92,8 +88,9 @@ void	printExchange(const t_pairStr &cell, const double value)
 				<< "\n";
 }
 
-parseStatus	convertToDouble(const char *str, double &value)
+parseStatus	convertToDouble(const std::string &inputString, double &value)
 {
+	const char *str = inputString.c_str ();
 	char *end = NULL;
 	value = std::strtod (str, &end);
 
@@ -107,7 +104,7 @@ parseStatus	convertToDouble(const char *str, double &value)
 	return (OK);
 }
 
-void	reportStatus(const parseStatus status, const char *source)
+void	reportStatus(const parseStatus status, const std::string &source)
 {
 	switch (status)
 	{
@@ -134,4 +131,23 @@ parseStatus	createCell(const std::string &temp, const char delimiter,t_pairStr &
 	return (OK);
 }
 
-// should i do c_str()??
+parseStatus	browseRate(const t_map &data, const std::string &input, double &value)
+{
+	if (data.empty ())
+		throw std::runtime_error ("empty data base");
+
+	if (input < data.begin ()->first)
+		return (BAD_INPUT);
+
+	t_map::const_iterator DataIndex = data.lower_bound (input);
+
+	if (DataIndex == data.end())
+		-- DataIndex;
+
+	else if ((*DataIndex).first != input && DataIndex != data.begin())
+	{
+		-- DataIndex;
+	}
+	value = DataIndex->second;
+	return (OK);
+}
