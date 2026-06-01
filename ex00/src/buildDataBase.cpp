@@ -50,7 +50,7 @@ void	buildDataBase(t_map &data, char delimiter, const char *path, bool hasHeader
 		}
 
 		// convert value to double
-		char *end = nullptr;
+		char *end = NULL;
 		double valueDouble = std::strtod (cell.second.c_str(), &end);
 
 		if (end == cell.second.c_str() || *end != '\0')
@@ -71,6 +71,6 @@ void	buildDataBase(t_map &data, char delimiter, const char *path, bool hasHeader
 
 static void	warning(std::string msg, std::string content, int line)
 {
-	std::cout	<< "Database Warning: @line:" << line <<" | " + msg << " >>" + content
+	std::cerr	<< "Database Warning: @line:" << line <<" | " + msg << " >>" + content
 				<< std::endl;
 }

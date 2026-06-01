@@ -1,6 +1,7 @@
 #include <iostream>
-#include <limits>
+#include <climits>
 #include <iomanip>
+#include <cstdlib>
 #include <string>
 #include <fstream>
 #include "types.hpp"
@@ -98,7 +99,7 @@ parseStatus	convertToDouble(const std::string &inputString, double &value)
 		return (BAD_INPUT);
 	else if (value < 0)
 		return (NEGATIVE);
-	else if (value > INT_MAX)
+	else if (value > 1000)
 		return (TOO_LARGE);
 	
 	return (OK);
@@ -111,7 +112,7 @@ void	reportStatus(const parseStatus status, const std::string &source)
 		case OK:
 			break;
 		case BAD_INPUT:
-			std::cout << "bad input => " << source << "\n";
+			std::cout << "Error: bad input => " << source << "\n";
 			break;
 		case NEGATIVE:
 			std::cout << "Error: not a positive number." << "\n";
