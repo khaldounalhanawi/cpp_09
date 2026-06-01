@@ -17,7 +17,7 @@ void	trimStr(std::string &str)
 	return;
 }
 
-bool	splitStr(const std::string &str, char &delimiter, t_pairStr &outPair)
+bool	splitStr(const std::string &str, const char &delimiter, t_pairStr &outPair)
 {
 	// find position of delimiter in string
 	size_t delimiterPos = str.find (delimiter, 0);

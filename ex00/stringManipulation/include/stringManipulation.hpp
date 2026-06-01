@@ -6,6 +6,6 @@
 # include "types_str.hpp"
 
 void	trimStr (std::string &str);
-bool	splitStr (const std::string &str, char &delimiter, t_pairStr &outPair);
+bool	splitStr (const std::string &str, const char &delimiter, t_pairStr &outPair);
 
 #endif
