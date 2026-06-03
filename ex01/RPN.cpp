@@ -12,6 +12,68 @@ enum charType
 	INVALID
 };
 
+charType	evaluateChar(const char c);
+int			errorCode(const std::string &msg, const int code);
+int			executeOperation(const char c, int a, int b);
+
+int	RPN(const std::string &input)
+{
+	std::istringstream sstream (input);
+	std::string token;
+	bool emptyString = true;
+
+	std::stack<int, std::list<int> > myStack;
+
+	while (sstream >> token)
+	{
+		emptyString = false;
+
+		if (token.size () != 1)
+			return (errorCode ("Error", 2));
+
+		char c = token[0];
+		charType type = evaluateChar (c);
+
+		switch (type)
+		{
+			case INVALID:
+				return (errorCode ("Error", 2));
+
+			case OPERATOR:
+			{
+				if (myStack.empty ())
+					return (errorCode ("Error", 3));
+
+				int b = myStack.top ();
+				myStack.pop ();
+				if (myStack.empty ())
+					return (errorCode ("Error", 3));
+
+				int a = myStack.top ();
+				myStack.pop ();
+
+				try { myStack.push (executeOperation (c, a, b)); }
+				catch (std::exception) { return (errorCode ("Error", 3)); };
+				break;
+			}
+
+			case OPERAND:
+				myStack.push (c - '0');
+				break;
+		}
+	}
+
+	if (emptyString)
+		return (errorCode ("Error", 2));
+
+	if (myStack.size () != 1)
+		return (errorCode ("Error", 4));
+
+	std::cout << myStack.top () << "\n" ;
+
+	return (0);
+}
+
 charType	evaluateChar(const char c)
 {
 	const std::string allowed = "+-/*";
@@ -58,61 +120,4 @@ int	executeOperation(const char c, int a, int b)
 		default:
 			throw std::runtime_error ("Invalid operator");
 	}
-}
-
-int	RPN(const std::string &input)
-{
-	std::istringstream sstream (input);
-	std::string token;
-	bool emptyString = true;
-
-	std::stack<int, std::list<int> > myStack;
-
-	while (sstream >> token)
-	{
-		emptyString = false;
-		if (token.size () != 1)
-			return (errorCode ("Error", 2));
-
-		char c = token[0];
-		charType type = evaluateChar (c);
-
-		switch (type)
-		{
-			case INVALID:
-				return (errorCode ("Error", 2));
-
-			case OPERATOR:
-			{
-				if (myStack.empty ())
-					return (errorCode ("Error", 3));
-
-				int b = myStack.top ();
-				myStack.pop ();
-				if (myStack.empty ())
-					return (errorCode ("Error", 3));
-
-				int a = myStack.top ();
-				myStack.pop ();
-
-				try { myStack.push (executeOperation (c, a, b)); }
-				catch (std::exception) { return (errorCode ("Error", 3));};
-				break;
-			}
-
-			case OPERAND:
-				myStack.push (c - '0');
-				break;
-		}
-	}
-
-	if (emptyString)
-		return (errorCode ("Error", 2));
-
-	if (myStack.size () != 1)
-		return (errorCode ("Error", 4));
-
-	std::cout << myStack.top () << "\n" ;
-
-	return (0);
 }
